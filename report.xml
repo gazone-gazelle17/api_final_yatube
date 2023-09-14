@@ -1,0 +1,1045 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="28" skipped="0" tests="55" time="7.797" timestamp="2023-09-12T15:06:35.829832" hostname="MacBook-Air-Aleksandr.local"><testcase classname="tests.test_comment.TestCommentAPI" name="test_comments_not_authenticated" time="0.329"><failure message="AssertionError: Проверьте, что GET-запрос неавторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 200.&#10;assert 404 == &lt;HTTPStatus.OK: 200&gt;&#10;  +404&#10;  -&lt;HTTPStatus.OK: 200&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x107460280&gt;, client = &lt;django.test.client.Client object at 0x1077779d0&gt;, post = &lt;Post: Тестовый пост 1&gt;
+
+    def test_comments_not_authenticated(self, client, post):
+        response = client.get(
+            self.comments_url.format(post_id=post.id)
+        )
+&gt;       assert response.status_code == HTTPStatus.OK, (
+            'Проверьте, что GET-запрос неавторизованного пользователя к '
+            f'`{self.comments_url}` возвращает ответ со статусом 200.'
+        )
+E       AssertionError: Проверьте, что GET-запрос неавторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 200.
+E       assert 404 == &lt;HTTPStatus.OK: 200&gt;
+E         +404
+E         -&lt;HTTPStatus.OK: 200&gt;
+
+tests/test_comment.py:46: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_single_not_authenticated" time="0.089"><failure message="AssertionError: Проверьте, что GET-запрос неавторизованного пользователя к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 200.&#10;assert 404 == &lt;HTTPStatus.OK: 200&gt;&#10;  +404&#10;  -&lt;HTTPStatus.OK: 200&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x107f82fa0&gt;, client = &lt;django.test.client.Client object at 0x107f8d8e0&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (1)&gt;
+
+    def test_comment_single_not_authenticated(self, client, post,
+                                              comment_1_post):
+        response = client.get(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_1_post.id
+            )
+        )
+&gt;       assert response.status_code == HTTPStatus.OK, (
+            'Проверьте, что GET-запрос неавторизованного пользователя к '
+            f'`{self.comment_detail_url}` возвращает ответ со статусом 200.'
+        )
+E       AssertionError: Проверьте, что GET-запрос неавторизованного пользователя к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 200.
+E       assert 404 == &lt;HTTPStatus.OK: 200&gt;
+E         +404
+E         -&lt;HTTPStatus.OK: 200&gt;
+
+tests/test_comment.py:58: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comments_not_found" time="0.111"><failure message="AssertionError: Эндпоинт `/api/v1/posts/{post_id}/comments/` не найден, проверьте настройки в *urls.py*.&#10;assert 404 != &lt;HTTPStatus.NOT_FOUND: 404&gt;&#10; +  where 404 = &lt;HttpResponseNotFound status_code=404, &quot;text/html&quot;&gt;.status_code&#10; +  and   &lt;HTTPStatus.NOT_FOUND: 404&gt; = HTTPStatus.NOT_FOUND">self = &lt;tests.test_comment.TestCommentAPI object at 0x107ff5a60&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x107fde190&gt;, post = &lt;Post: Тестовый пост 1&gt;
+
+    def test_comments_not_found(self, user_client, post):
+        response = user_client.get(
+            self.comments_url.format(post_id=post.id)
+        )
+&gt;       assert response.status_code != HTTPStatus.NOT_FOUND, (
+            f'Эндпоинт `{self.comments_url}` не найден, проверьте настройки в '
+            '*urls.py*.'
+        )
+E       AssertionError: Эндпоинт `/api/v1/posts/{post_id}/comments/` не найден, проверьте настройки в *urls.py*.
+E       assert 404 != &lt;HTTPStatus.NOT_FOUND: 404&gt;
+E        +  where 404 = &lt;HttpResponseNotFound status_code=404, "text/html"&gt;.status_code
+E        +  and   &lt;HTTPStatus.NOT_FOUND: 404&gt; = HTTPStatus.NOT_FOUND
+
+tests/test_comment.py:67: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comments_id_available" time="0.090"><failure message="AssertionError: Эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/` не найден, проверьте настройки в *urls.py*.&#10;assert 404 != &lt;HTTPStatus.NOT_FOUND: 404&gt;&#10; +  where 404 = &lt;HttpResponseNotFound status_code=404, &quot;text/html&quot;&gt;.status_code&#10; +  and   &lt;HTTPStatus.NOT_FOUND: 404&gt; = HTTPStatus.NOT_FOUND">self = &lt;tests.test_comment.TestCommentAPI object at 0x107fde550&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x110197460&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (2)&gt;
+
+    def test_comments_id_available(self, user_client, post, comment_1_post):
+        response = user_client.get(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_1_post.id
+            )
+        )
+&gt;       assert response.status_code != HTTPStatus.NOT_FOUND, (
+            f'Эндпоинт `{self.comment_detail_url}` не найден, проверьте '
+            'настройки в *urls.py*.'
+        )
+E       AssertionError: Эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/` не найден, проверьте настройки в *urls.py*.
+E       assert 404 != &lt;HTTPStatus.NOT_FOUND: 404&gt;
+E        +  where 404 = &lt;HttpResponseNotFound status_code=404, "text/html"&gt;.status_code
+E        +  and   &lt;HTTPStatus.NOT_FOUND: 404&gt; = HTTPStatus.NOT_FOUND
+
+tests/test_comment.py:78: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comments_get" time="0.169"><failure message="AssertionError: Проверьте, что при GET-запросе авторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращается ответ со статусом 200.&#10;assert 404 == &lt;HTTPStatus.OK: 200&gt;&#10;  +404&#10;  -&lt;HTTPStatus.OK: 200&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x110197b20&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x11019feb0&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (3)&gt;, comment_2_post = &lt;Comment: Comment object (4)&gt;, comment_1_another_post = &lt;Comment: Comment object (5)&gt;
+
+    def test_comments_get(self, user_client, post, comment_1_post,
+                          comment_2_post, comment_1_another_post):
+        response = user_client.get(
+            self.comments_url.format(post_id=post.id)
+        )
+&gt;       assert response.status_code == HTTPStatus.OK, (
+            'Проверьте, что при GET-запросе авторизованного пользователя к '
+            f'`{self.comments_url}` возвращается ответ со статусом 200.'
+        )
+E       AssertionError: Проверьте, что при GET-запросе авторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращается ответ со статусом 200.
+E       assert 404 == &lt;HTTPStatus.OK: 200&gt;
+E         +404
+E         -&lt;HTTPStatus.OK: 200&gt;
+
+tests/test_comment.py:88: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_create_by_unauth" time="0.090"><failure message="AssertionError: Проверьте, что для неавторизованного пользователя POST-запрос к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 401.&#10;assert 404 == &lt;HTTPStatus.UNAUTHORIZED: 401&gt;&#10;  +404&#10;  -&lt;HTTPStatus.UNAUTHORIZED: 401&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101a9160&gt;, client = &lt;django.test.client.Client object at 0x110199820&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (6)&gt;
+
+    def test_comment_create_by_unauth(self, client, post, comment_1_post):
+        comment_cnt = Comment.objects.count()
+    
+        assert_msg = (
+            'Проверьте, что для неавторизованного пользователя POST-запрос '
+            f'к `{self.comments_url}` возвращает ответ со статусом 401.'
+        )
+        data = {'text': self.TEXT_FOR_COMMENT}
+        try:
+            response = client.post(
+                self.comments_url.format(post_id=post.id),
+                data=data
+            )
+        except ValueError as error:
+            raise AssertionError(
+                assert_msg + (
+                    '\nВ процессе выполнения запроса произошла ошибка: '
+                    f'{error}'
+                )
+            )
+&gt;       assert response.status_code == HTTPStatus.UNAUTHORIZED, assert_msg
+E       AssertionError: Проверьте, что для неавторизованного пользователя POST-запрос к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 401.
+E       assert 404 == &lt;HTTPStatus.UNAUTHORIZED: 401&gt;
+E         +404
+E         -&lt;HTTPStatus.UNAUTHORIZED: 401&gt;
+
+tests/test_comment.py:131: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comments_post_auth_with_valid_data" time="0.169"><failure message="AssertionError: Проверьте, что POST-запрос с корректными данными от авторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 201.&#10;assert 404 == &lt;HTTPStatus.CREATED: 201&gt;&#10;  +404&#10;  -&lt;HTTPStatus.CREATED: 201&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101995b0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1101e5310&gt;, post = &lt;Post: Тестовый пост 1&gt;
+user = &lt;User: TestUser&gt;, another_user = &lt;User: TestUserAnother&gt;
+
+    def test_comments_post_auth_with_valid_data(self, user_client, post,
+                                                user, another_user):
+        comments_count = Comment.objects.count()
+    
+        assert_msg = (
+            'Проверьте, что POST-запрос с корректными данными от '
+            f'авторизованного пользователя к `{self.comments_url}` возвращает '
+            'ответ со статусом 201.'
+        )
+        data = {'text': self.TEXT_FOR_COMMENT}
+        try:
+            response = user_client.post(
+                self.comments_url.format(post_id=post.id),
+                data=data
+            )
+        except IntegrityError as error:
+            raise AssertionError(
+                assert_msg + (
+                    f' В процессе выполнения запроса произошла ошибка: {error}'
+                )
+            )
+&gt;       assert response.status_code == HTTPStatus.CREATED, assert_msg
+E       AssertionError: Проверьте, что POST-запрос с корректными данными от авторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 201.
+E       assert 404 == &lt;HTTPStatus.CREATED: 201&gt;
+E         +404
+E         -&lt;HTTPStatus.CREATED: 201&gt;
+
+tests/test_comment.py:159: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comments_auth_post_with_invalid_data" time="0.091"><failure message="AssertionError: Проверьте, что POST-запрос с некорректными данными от авторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 400.&#10;assert 404 == &lt;HTTPStatus.BAD_REQUEST: 400&gt;&#10;  +404&#10;  -&lt;HTTPStatus.BAD_REQUEST: 400&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101e50a0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x110212b80&gt;, post = &lt;Post: Тестовый пост 1&gt;
+
+    def test_comments_auth_post_with_invalid_data(self, user_client, post):
+        comments_count = Comment.objects.count()
+    
+        response = user_client.post(
+            self.comments_url.format(post_id=post.id),
+            data={}
+        )
+&gt;       assert response.status_code == HTTPStatus.BAD_REQUEST, (
+            'Проверьте, что POST-запрос с некорректными данными от '
+            f'авторизованного пользователя к `{self.comments_url}` возвращает '
+            'ответ со статусом 400.'
+        )
+E       AssertionError: Проверьте, что POST-запрос с некорректными данными от авторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 400.
+E       assert 404 == &lt;HTTPStatus.BAD_REQUEST: 400&gt;
+E         +404
+E         -&lt;HTTPStatus.BAD_REQUEST: 400&gt;
+
+tests/test_comment.py:194: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_author_and_post_are_read_only" time="0.091"><failure message="AssertionError: Проверьте, что POST-запрос с некорректными данными от авторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 400.&#10;assert 404 == &lt;HTTPStatus.BAD_REQUEST: 400&gt;&#10;  +404&#10;  -&lt;HTTPStatus.BAD_REQUEST: 400&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x110212280&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1101cd400&gt;, post = &lt;Post: Тестовый пост 1&gt;
+
+    def test_comment_author_and_post_are_read_only(self, user_client, post):
+        response = user_client.post(
+            self.comments_url.format(post_id=post.id),
+            data={}
+        )
+&gt;       assert response.status_code == HTTPStatus.BAD_REQUEST, (
+            'Проверьте, что POST-запрос с некорректными данными от '
+            f'авторизованного пользователя к `{self.comments_url}` возвращает '
+            'ответ со статусом 400.'
+        )
+E       AssertionError: Проверьте, что POST-запрос с некорректными данными от авторизованного пользователя к `/api/v1/posts/{post_id}/comments/` возвращает ответ со статусом 400.
+E       assert 404 == &lt;HTTPStatus.BAD_REQUEST: 400&gt;
+E         +404
+E         -&lt;HTTPStatus.BAD_REQUEST: 400&gt;
+
+tests/test_comment.py:209: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_id_auth_get" time="0.090"><failure message="AssertionError: Проверьте, что GET-запрос авторизованного пользователя к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 200.&#10;assert 404 == &lt;HTTPStatus.OK: 200&gt;&#10;  +404&#10;  -&lt;HTTPStatus.OK: 200&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101a1df0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x110215d90&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (7)&gt;, user = &lt;User: TestUser&gt;
+
+    def test_comment_id_auth_get(self, user_client, post,
+                                 comment_1_post, user):
+        response = user_client.get(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_1_post.id
+            )
+        )
+&gt;       assert response.status_code == HTTPStatus.OK, (
+            'Проверьте, что GET-запрос авторизованного пользователя к '
+            f'`{self.comment_detail_url}` возвращает ответ со статусом 200.'
+        )
+E       AssertionError: Проверьте, что GET-запрос авторизованного пользователя к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 200.
+E       assert 404 == &lt;HTTPStatus.OK: 200&gt;
+E         +404
+E         -&lt;HTTPStatus.OK: 200&gt;
+
+tests/test_comment.py:227: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_change_by_auth_with_valid_data[put]" time="0.171"><failure message="AssertionError: Проверьте, что PUT-запрос, отправленный авторизованным пользователем на эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/` к собственному комментарию, возвращает ответ со статусом 200.&#10;assert 404 == &lt;HTTPStatus.OK: 200&gt;&#10;  +404&#10;  -&lt;HTTPStatus.OK: 200&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x110212cd0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x110222370&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (8)&gt;, comment_2_post = &lt;Comment: Comment object (9)&gt;, http_method = 'PUT'
+
+    @pytest.mark.parametrize('http_method', ('put', 'patch'))
+    def test_comment_change_by_auth_with_valid_data(self,
+                                                    user_client,
+                                                    post,
+                                                    comment_1_post,
+                                                    comment_2_post,
+                                                    http_method):
+        request_func = getattr(user_client, http_method)
+        response = request_func(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_1_post.id
+            ),
+            data={'text': self.TEXT_FOR_COMMENT}
+        )
+        http_method = http_method.upper()
+&gt;       assert response.status_code == HTTPStatus.OK, (
+            f'Проверьте, что {http_method}-запрос, отправленный '
+            'авторизованным пользователем на эндпоинт '
+            f'`{self.comment_detail_url}` к собственному комментарию, '
+            'возвращает ответ со статусом 200.'
+        )
+E       AssertionError: Проверьте, что PUT-запрос, отправленный авторизованным пользователем на эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/` к собственному комментарию, возвращает ответ со статусом 200.
+E       assert 404 == &lt;HTTPStatus.OK: 200&gt;
+E         +404
+E         -&lt;HTTPStatus.OK: 200&gt;
+
+tests/test_comment.py:264: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_change_by_auth_with_valid_data[patch]" time="0.171"><failure message="AssertionError: Проверьте, что PATCH-запрос, отправленный авторизованным пользователем на эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/` к собственному комментарию, возвращает ответ со статусом 200.&#10;assert 404 == &lt;HTTPStatus.OK: 200&gt;&#10;  +404&#10;  -&lt;HTTPStatus.OK: 200&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101a1eb0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1102127f0&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (10)&gt;, comment_2_post = &lt;Comment: Comment object (11)&gt;, http_method = 'PATCH'
+
+    @pytest.mark.parametrize('http_method', ('put', 'patch'))
+    def test_comment_change_by_auth_with_valid_data(self,
+                                                    user_client,
+                                                    post,
+                                                    comment_1_post,
+                                                    comment_2_post,
+                                                    http_method):
+        request_func = getattr(user_client, http_method)
+        response = request_func(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_1_post.id
+            ),
+            data={'text': self.TEXT_FOR_COMMENT}
+        )
+        http_method = http_method.upper()
+&gt;       assert response.status_code == HTTPStatus.OK, (
+            f'Проверьте, что {http_method}-запрос, отправленный '
+            'авторизованным пользователем на эндпоинт '
+            f'`{self.comment_detail_url}` к собственному комментарию, '
+            'возвращает ответ со статусом 200.'
+        )
+E       AssertionError: Проверьте, что PATCH-запрос, отправленный авторизованным пользователем на эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/` к собственному комментарию, возвращает ответ со статусом 200.
+E       assert 404 == &lt;HTTPStatus.OK: 200&gt;
+E         +404
+E         -&lt;HTTPStatus.OK: 200&gt;
+
+tests/test_comment.py:264: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_change_not_auth_with_valid_data[put]" time="0.089"><failure message="AssertionError: Проверьте, что для неавторизованного пользователя PUT-запрос к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 401.&#10;assert 404 == &lt;HTTPStatus.UNAUTHORIZED: 401&gt;&#10;  +404&#10;  -&lt;HTTPStatus.UNAUTHORIZED: 401&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101e4100&gt;, client = &lt;django.test.client.Client object at 0x1101c9700&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (12)&gt;, http_method = 'PUT'
+
+    @pytest.mark.parametrize('http_method', ('put', 'patch'))
+    def test_comment_change_not_auth_with_valid_data(self,
+                                                     client,
+                                                     post,
+                                                     comment_1_post,
+                                                     http_method):
+        request_func = getattr(client, http_method)
+        response = request_func(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_1_post.id
+            ),
+            data={'text': self.TEXT_FOR_COMMENT}
+        )
+        http_method = http_method.upper()
+&gt;       assert response.status_code == HTTPStatus.UNAUTHORIZED, (
+            f'Проверьте, что для неавторизованного пользователя {http_method}'
+            f'-запрос к `{self.comment_detail_url}` возвращает ответ со '
+            'статусом 401.'
+        )
+E       AssertionError: Проверьте, что для неавторизованного пользователя PUT-запрос к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 401.
+E       assert 404 == &lt;HTTPStatus.UNAUTHORIZED: 401&gt;
+E         +404
+E         -&lt;HTTPStatus.UNAUTHORIZED: 401&gt;
+
+tests/test_comment.py:307: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_change_not_auth_with_valid_data[patch]" time="0.091"><failure message="AssertionError: Проверьте, что для неавторизованного пользователя PATCH-запрос к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 401.&#10;assert 404 == &lt;HTTPStatus.UNAUTHORIZED: 401&gt;&#10;  +404&#10;  -&lt;HTTPStatus.UNAUTHORIZED: 401&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101dbeb0&gt;, client = &lt;django.test.client.Client object at 0x1101dbca0&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (13)&gt;, http_method = 'PATCH'
+
+    @pytest.mark.parametrize('http_method', ('put', 'patch'))
+    def test_comment_change_not_auth_with_valid_data(self,
+                                                     client,
+                                                     post,
+                                                     comment_1_post,
+                                                     http_method):
+        request_func = getattr(client, http_method)
+        response = request_func(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_1_post.id
+            ),
+            data={'text': self.TEXT_FOR_COMMENT}
+        )
+        http_method = http_method.upper()
+&gt;       assert response.status_code == HTTPStatus.UNAUTHORIZED, (
+            f'Проверьте, что для неавторизованного пользователя {http_method}'
+            f'-запрос к `{self.comment_detail_url}` возвращает ответ со '
+            'статусом 401.'
+        )
+E       AssertionError: Проверьте, что для неавторизованного пользователя PATCH-запрос к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 401.
+E       assert 404 == &lt;HTTPStatus.UNAUTHORIZED: 401&gt;
+E         +404
+E         -&lt;HTTPStatus.UNAUTHORIZED: 401&gt;
+
+tests/test_comment.py:307: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_delete_by_author" time="0.090"><failure message="AssertionError: Проверьте, что DELETE-запрос, отправленный авторизованным пользователем к собственному комментарию на эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/`, возвращает ответ со статусом 204.&#10;assert 404 == &lt;HTTPStatus.NO_CONTENT: 204&gt;&#10;  +404&#10;  -&lt;HTTPStatus.NO_CONTENT: 204&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101dbd90&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1101b9d00&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (14)&gt;
+
+    def test_comment_delete_by_author(self, user_client,
+                                      post, comment_1_post):
+        response = user_client.delete(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_1_post.id
+            )
+        )
+&gt;       assert response.status_code == HTTPStatus.NO_CONTENT, (
+            'Проверьте, что DELETE-запрос, отправленный авторизованным '
+            'пользователем к собственному комментарию на эндпоинт '
+            f'`{self.comment_detail_url}`, возвращает ответ со статусом 204.'
+        )
+E       AssertionError: Проверьте, что DELETE-запрос, отправленный авторизованным пользователем к собственному комментарию на эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/`, возвращает ответ со статусом 204.
+E       assert 404 == &lt;HTTPStatus.NO_CONTENT: 204&gt;
+E         +404
+E         -&lt;HTTPStatus.NO_CONTENT: 204&gt;
+
+tests/test_comment.py:326: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_delete_by_not_author" time="0.166"><failure message="AssertionError: Проверьте, что DELETE-запрос, отправленный авторизованным пользователем к чужому комментарию на эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/`, возвращает ответ со статусом 403.&#10;assert 404 == &lt;HTTPStatus.FORBIDDEN: 403&gt;&#10;  +404&#10;  -&lt;HTTPStatus.FORBIDDEN: 403&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101d4460&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1101dd190&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_2_post = &lt;Comment: Comment object (15)&gt;
+
+    def test_comment_delete_by_not_author(self, user_client,
+                                          post, comment_2_post):
+        response = user_client.delete(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_2_post.id
+            )
+        )
+&gt;       assert response.status_code == HTTPStatus.FORBIDDEN, (
+            'Проверьте, что DELETE-запрос, отправленный авторизованным '
+            'пользователем к чужому комментарию на эндпоинт '
+            f'`{self.comment_detail_url}`, возвращает ответ со статусом 403.'
+        )
+E       AssertionError: Проверьте, что DELETE-запрос, отправленный авторизованным пользователем к чужому комментарию на эндпоинт `/api/v1/posts/{post_id}/comments/{comment_id}/`, возвращает ответ со статусом 403.
+E       assert 404 == &lt;HTTPStatus.FORBIDDEN: 403&gt;
+E         +404
+E         -&lt;HTTPStatus.FORBIDDEN: 403&gt;
+
+tests/test_comment.py:345: AssertionError</failure></testcase><testcase classname="tests.test_comment.TestCommentAPI" name="test_comment_delete_by_unauth" time="0.091"><failure message="AssertionError: Проверьте, что для неавторизованного пользователя DELETE-запрос к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 401.&#10;assert 404 == &lt;HTTPStatus.UNAUTHORIZED: 401&gt;&#10;  +404&#10;  -&lt;HTTPStatus.UNAUTHORIZED: 401&gt;">self = &lt;tests.test_comment.TestCommentAPI object at 0x1101cbf10&gt;, client = &lt;django.test.client.Client object at 0x1101cb310&gt;, post = &lt;Post: Тестовый пост 1&gt;
+comment_1_post = &lt;Comment: Comment object (16)&gt;
+
+    def test_comment_delete_by_unauth(self, client, post, comment_1_post):
+        response = client.delete(
+            self.comment_detail_url.format(
+                post_id=post.id, comment_id=comment_1_post.id
+            )
+        )
+&gt;       assert response.status_code == HTTPStatus.UNAUTHORIZED, (
+            'Проверьте, что для неавторизованного пользователя DELETE-запрос '
+            f'к `{self.comment_detail_url}` возвращает ответ со статусом 401.'
+        )
+E       AssertionError: Проверьте, что для неавторизованного пользователя DELETE-запрос к `/api/v1/posts/{post_id}/comments/{comment_id}/` возвращает ответ со статусом 401.
+E       assert 404 == &lt;HTTPStatus.UNAUTHORIZED: 401&gt;
+E         +404
+E         -&lt;HTTPStatus.UNAUTHORIZED: 401&gt;
+
+tests/test_comment.py:363: AssertionError</failure></testcase><testcase classname="tests.test_follow.TestFollowAPI" name="test_follow_not_found" time="0.275"><failure message="TypeError: 'list' object is not callable">self = &lt;tests.test_follow.TestFollowAPI object at 0x1101cb7c0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1101ddc70&gt;
+follow_1 = &lt;Follow: Follow object (1)&gt;, follow_2 = &lt;Follow: Follow object (2)&gt;
+
+    def test_follow_not_found(self, user_client, follow_1, follow_2):
+&gt;       response = user_client.get(self.url)
+
+tests/test_follow.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+venv/lib/python3.9/site-packages/rest_framework/test.py:288: in get
+    response = super().get(path, data=data, **extra)
+venv/lib/python3.9/site-packages/rest_framework/test.py:205: in get
+    return self.generic('GET', path, **r)
+venv/lib/python3.9/site-packages/rest_framework/test.py:233: in generic
+    return super().generic(
+venv/lib/python3.9/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.9/site-packages/rest_framework/test.py:285: in request
+    return super().request(**kwargs)
+venv/lib/python3.9/site-packages/rest_framework/test.py:237: in request
+    request = super().request(**kwargs)
+venv/lib/python3.9/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.9/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.9/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.9/site-packages/django/core/handlers/base.py:181: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+venv/lib/python3.9/site-packages/django/views/decorators/csrf.py:54: in wrapped_view
+    return view_func(*args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/viewsets.py:125: in view
+    return self.dispatch(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/views.py:509: in dispatch
+    response = self.handle_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:469: in handle_exception
+    self.raise_uncaught_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:480: in raise_uncaught_exception
+    raise exc
+venv/lib/python3.9/site-packages/rest_framework/views.py:506: in dispatch
+    response = handler(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/mixins.py:40: in list
+    page = self.paginate_queryset(queryset)
+venv/lib/python3.9/site-packages/rest_framework/generics.py:169: in paginate_queryset
+    if self.paginator is None:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;api.views.FollowingViewSet object at 0x1101c9940&gt;
+
+    @property
+    def paginator(self):
+        """
+        The paginator instance associated with the view, or `None`.
+        """
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+&gt;               self._paginator = self.pagination_class()
+E               TypeError: 'list' object is not callable
+
+venv/lib/python3.9/site-packages/rest_framework/generics.py:162: TypeError</failure></testcase><testcase classname="tests.test_follow.TestFollowAPI" name="test_follow_not_auth" time="0.256" /><testcase classname="tests.test_follow.TestFollowAPI" name="test_follow_get" time="0.257"><failure message="TypeError: 'list' object is not callable">self = &lt;tests.test_follow.TestFollowAPI object at 0x1101e5e50&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1102121f0&gt;, user = &lt;User: TestUser&gt;
+follow_1 = &lt;Follow: Follow object (5)&gt;, follow_2 = &lt;Follow: Follow object (6)&gt;, follow_3 = &lt;Follow: Follow object (7)&gt;
+
+    def test_follow_get(self, user_client, user, follow_1, follow_2, follow_3):
+&gt;       response = user_client.get(self.url)
+
+tests/test_follow.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+venv/lib/python3.9/site-packages/rest_framework/test.py:288: in get
+    response = super().get(path, data=data, **extra)
+venv/lib/python3.9/site-packages/rest_framework/test.py:205: in get
+    return self.generic('GET', path, **r)
+venv/lib/python3.9/site-packages/rest_framework/test.py:233: in generic
+    return super().generic(
+venv/lib/python3.9/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.9/site-packages/rest_framework/test.py:285: in request
+    return super().request(**kwargs)
+venv/lib/python3.9/site-packages/rest_framework/test.py:237: in request
+    request = super().request(**kwargs)
+venv/lib/python3.9/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.9/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.9/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.9/site-packages/django/core/handlers/base.py:181: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+venv/lib/python3.9/site-packages/django/views/decorators/csrf.py:54: in wrapped_view
+    return view_func(*args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/viewsets.py:125: in view
+    return self.dispatch(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/views.py:509: in dispatch
+    response = self.handle_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:469: in handle_exception
+    self.raise_uncaught_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:480: in raise_uncaught_exception
+    raise exc
+venv/lib/python3.9/site-packages/rest_framework/views.py:506: in dispatch
+    response = handler(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/mixins.py:40: in list
+    page = self.paginate_queryset(queryset)
+venv/lib/python3.9/site-packages/rest_framework/generics.py:169: in paginate_queryset
+    if self.paginator is None:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;api.views.FollowingViewSet object at 0x1101975b0&gt;
+
+    @property
+    def paginator(self):
+        """
+        The paginator instance associated with the view, or `None`.
+        """
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+&gt;               self._paginator = self.pagination_class()
+E               TypeError: 'list' object is not callable
+
+venv/lib/python3.9/site-packages/rest_framework/generics.py:162: TypeError</failure></testcase><testcase classname="tests.test_follow.TestFollowAPI" name="test_follow_create" time="0.268"><failure message="django.db.utils.IntegrityError: NOT NULL constraint failed: posts_follow.following_id">self = &lt;django.db.backends.utils.CursorWrapper object at 0x110583730&gt;, sql = 'INSERT INTO "posts_follow" ("user_id", "following_id") VALUES (%s, %s)'
+params = [32, None]
+ignored_wrapper_args = (False, {'connection': &lt;django.db.backends.sqlite3.base.DatabaseWrapper object at 0x106f6d2e0&gt;, 'cursor': &lt;django.db.backends.utils.CursorWrapper object at 0x110583730&gt;})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+&gt;               return self.cursor.execute(sql, params)
+
+venv/lib/python3.9/site-packages/django/db/backends/utils.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x1101c4ee0&gt;, query = 'INSERT INTO "posts_follow" ("user_id", "following_id") VALUES (?, ?)'
+params = [32, None]
+
+    def execute(self, query, params=None):
+        if params is None:
+            return Database.Cursor.execute(self, query)
+        query = self.convert_query(query)
+&gt;       return Database.Cursor.execute(self, query, params)
+E       sqlite3.IntegrityError: NOT NULL constraint failed: posts_follow.following_id
+
+venv/lib/python3.9/site-packages/django/db/backends/sqlite3/base.py:423: IntegrityError
+
+The above exception was the direct cause of the following exception:
+
+self = &lt;tests.test_follow.TestFollowAPI object at 0x1105ad670&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x110583d60&gt;
+follow_2 = &lt;Follow: Follow object (8)&gt;, follow_3 = &lt;Follow: Follow object (9)&gt;, user = &lt;User: TestUser&gt;, user_2 = &lt;User: TestUser2&gt;
+another_user = &lt;User: TestUserAnother&gt;
+
+    def test_follow_create(self, user_client, follow_2, follow_3, user,
+                           user_2, another_user):
+        follow_count = Follow.objects.count()
+    
+        data = {}
+&gt;       response = user_client.post(self.url, data=data)
+
+tests/test_follow.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+venv/lib/python3.9/site-packages/rest_framework/test.py:295: in post
+    response = super().post(
+venv/lib/python3.9/site-packages/rest_framework/test.py:209: in post
+    return self.generic('POST', path, data, content_type, **extra)
+venv/lib/python3.9/site-packages/rest_framework/test.py:233: in generic
+    return super().generic(
+venv/lib/python3.9/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.9/site-packages/rest_framework/test.py:285: in request
+    return super().request(**kwargs)
+venv/lib/python3.9/site-packages/rest_framework/test.py:237: in request
+    request = super().request(**kwargs)
+venv/lib/python3.9/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.9/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.9/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.9/site-packages/django/core/handlers/base.py:181: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+venv/lib/python3.9/site-packages/django/views/decorators/csrf.py:54: in wrapped_view
+    return view_func(*args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/viewsets.py:125: in view
+    return self.dispatch(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/views.py:509: in dispatch
+    response = self.handle_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:469: in handle_exception
+    self.raise_uncaught_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:480: in raise_uncaught_exception
+    raise exc
+venv/lib/python3.9/site-packages/rest_framework/views.py:506: in dispatch
+    response = handler(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/mixins.py:19: in create
+    self.perform_create(serializer)
+venv/lib/python3.9/site-packages/rest_framework/mixins.py:24: in perform_create
+    serializer.save()
+venv/lib/python3.9/site-packages/rest_framework/serializers.py:205: in save
+    self.instance = self.create(validated_data)
+venv/lib/python3.9/site-packages/rest_framework/serializers.py:939: in create
+    instance = ModelClass._default_manager.create(**validated_data)
+venv/lib/python3.9/site-packages/django/db/models/manager.py:85: in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+venv/lib/python3.9/site-packages/django/db/models/query.py:453: in create
+    obj.save(force_insert=True, using=self.db)
+venv/lib/python3.9/site-packages/django/db/models/base.py:739: in save
+    self.save_base(using=using, force_insert=force_insert,
+venv/lib/python3.9/site-packages/django/db/models/base.py:776: in save_base
+    updated = self._save_table(
+venv/lib/python3.9/site-packages/django/db/models/base.py:881: in _save_table
+    results = self._do_insert(cls._base_manager, using, fields, returning_fields, raw)
+venv/lib/python3.9/site-packages/django/db/models/base.py:919: in _do_insert
+    return manager._insert(
+venv/lib/python3.9/site-packages/django/db/models/manager.py:85: in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+venv/lib/python3.9/site-packages/django/db/models/query.py:1270: in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+venv/lib/python3.9/site-packages/django/db/models/sql/compiler.py:1416: in execute_sql
+    cursor.execute(sql, params)
+venv/lib/python3.9/site-packages/django/db/backends/utils.py:66: in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+venv/lib/python3.9/site-packages/django/db/backends/utils.py:75: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+venv/lib/python3.9/site-packages/django/db/backends/utils.py:84: in _execute
+    return self.cursor.execute(sql, params)
+venv/lib/python3.9/site-packages/django/db/utils.py:90: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+venv/lib/python3.9/site-packages/django/db/backends/utils.py:84: in _execute
+    return self.cursor.execute(sql, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x1101c4ee0&gt;, query = 'INSERT INTO "posts_follow" ("user_id", "following_id") VALUES (?, ?)'
+params = [32, None]
+
+    def execute(self, query, params=None):
+        if params is None:
+            return Database.Cursor.execute(self, query)
+        query = self.convert_query(query)
+&gt;       return Database.Cursor.execute(self, query, params)
+E       django.db.utils.IntegrityError: NOT NULL constraint failed: posts_follow.following_id
+
+venv/lib/python3.9/site-packages/django/db/backends/sqlite3/base.py:423: IntegrityError</failure></testcase><testcase classname="tests.test_follow.TestFollowAPI" name="test_follow_search_filter" time="0.258"><failure message="TypeError: 'list' object is not callable">self = &lt;tests.test_follow.TestFollowAPI object at 0x110d9b9a0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x110be1460&gt;
+follow_1 = &lt;Follow: Follow object (10)&gt;, follow_2 = &lt;Follow: Follow object (11)&gt;, follow_3 = &lt;Follow: Follow object (12)&gt;, follow_4 = &lt;Follow: Follow object (13)&gt;
+follow_5 = &lt;Follow: Follow object (14)&gt;, user = &lt;User: TestUser&gt;, user_2 = &lt;User: TestUser2&gt;, another_user = &lt;User: TestUserAnother&gt;
+
+    @pytest.mark.django_db(transaction=True)
+    def test_follow_search_filter(self, user_client, follow_1, follow_2,
+                                  follow_3, follow_4, follow_5,
+                                  user, user_2, another_user):
+    
+        user_follows = Follow.objects.filter(user=user)
+    
+&gt;       response = user_client.get(self.url)
+
+tests/test_follow.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+venv/lib/python3.9/site-packages/rest_framework/test.py:288: in get
+    response = super().get(path, data=data, **extra)
+venv/lib/python3.9/site-packages/rest_framework/test.py:205: in get
+    return self.generic('GET', path, **r)
+venv/lib/python3.9/site-packages/rest_framework/test.py:233: in generic
+    return super().generic(
+venv/lib/python3.9/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.9/site-packages/rest_framework/test.py:285: in request
+    return super().request(**kwargs)
+venv/lib/python3.9/site-packages/rest_framework/test.py:237: in request
+    request = super().request(**kwargs)
+venv/lib/python3.9/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.9/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.9/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.9/site-packages/django/core/handlers/base.py:181: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+venv/lib/python3.9/site-packages/django/views/decorators/csrf.py:54: in wrapped_view
+    return view_func(*args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/viewsets.py:125: in view
+    return self.dispatch(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/views.py:509: in dispatch
+    response = self.handle_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:469: in handle_exception
+    self.raise_uncaught_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:480: in raise_uncaught_exception
+    raise exc
+venv/lib/python3.9/site-packages/rest_framework/views.py:506: in dispatch
+    response = handler(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/mixins.py:40: in list
+    page = self.paginate_queryset(queryset)
+venv/lib/python3.9/site-packages/rest_framework/generics.py:169: in paginate_queryset
+    if self.paginator is None:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;api.views.FollowingViewSet object at 0x110da1820&gt;
+
+    @property
+    def paginator(self):
+        """
+        The paginator instance associated with the view, or `None`.
+        """
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+&gt;               self._paginator = self.pagination_class()
+E               TypeError: 'list' object is not callable
+
+venv/lib/python3.9/site-packages/rest_framework/generics.py:162: TypeError</failure></testcase><testcase classname="tests.test_group.TestGroupAPI" name="test_group_not_found" time="0.014"><failure message="TypeError: 'list' object is not callable">self = &lt;tests.test_group.TestGroupAPI object at 0x110be1520&gt;, client = &lt;django.test.client.Client object at 0x110a14b80&gt;, group_1 = &lt;Group: Группа 1&gt;
+
+    def test_group_not_found(self, client, group_1):
+&gt;       response = client.get(self.group_url)
+
+tests/test_group.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+venv/lib/python3.9/site-packages/django/test/client.py:742: in get
+    response = super().get(path, data=data, secure=secure, **extra)
+venv/lib/python3.9/site-packages/django/test/client.py:396: in get
+    return self.generic('GET', path, secure=secure, **{
+venv/lib/python3.9/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.9/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.9/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.9/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.9/site-packages/django/core/handlers/base.py:181: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+venv/lib/python3.9/site-packages/django/views/decorators/csrf.py:54: in wrapped_view
+    return view_func(*args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/viewsets.py:125: in view
+    return self.dispatch(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/views.py:509: in dispatch
+    response = self.handle_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:469: in handle_exception
+    self.raise_uncaught_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:480: in raise_uncaught_exception
+    raise exc
+venv/lib/python3.9/site-packages/rest_framework/views.py:506: in dispatch
+    response = handler(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/mixins.py:40: in list
+    page = self.paginate_queryset(queryset)
+venv/lib/python3.9/site-packages/rest_framework/generics.py:169: in paginate_queryset
+    if self.paginator is None:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;api.views.GroupViewSet object at 0x11099eb50&gt;
+
+    @property
+    def paginator(self):
+        """
+        The paginator instance associated with the view, or `None`.
+        """
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+&gt;               self._paginator = self.pagination_class()
+E               TypeError: 'list' object is not callable
+
+venv/lib/python3.9/site-packages/rest_framework/generics.py:162: TypeError</failure></testcase><testcase classname="tests.test_group.TestGroupAPI" name="test_group_list_not_auth" time="0.095"><failure message="TypeError: 'list' object is not callable">self = &lt;tests.test_group.TestGroupAPI object at 0x110a14760&gt;, client = &lt;django.test.client.Client object at 0x11052dfa0&gt;, post = &lt;Post: Тестовый пост 1&gt;
+group_1 = &lt;Group: Группа 1&gt;
+
+    def test_group_list_not_auth(self, client, post, group_1):
+&gt;       response = client.get(self.group_url)
+
+tests/test_group.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+venv/lib/python3.9/site-packages/django/test/client.py:742: in get
+    response = super().get(path, data=data, secure=secure, **extra)
+venv/lib/python3.9/site-packages/django/test/client.py:396: in get
+    return self.generic('GET', path, secure=secure, **{
+venv/lib/python3.9/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.9/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.9/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.9/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.9/site-packages/django/core/handlers/base.py:181: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+venv/lib/python3.9/site-packages/django/views/decorators/csrf.py:54: in wrapped_view
+    return view_func(*args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/viewsets.py:125: in view
+    return self.dispatch(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/views.py:509: in dispatch
+    response = self.handle_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:469: in handle_exception
+    self.raise_uncaught_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:480: in raise_uncaught_exception
+    raise exc
+venv/lib/python3.9/site-packages/rest_framework/views.py:506: in dispatch
+    response = handler(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/mixins.py:40: in list
+    page = self.paginate_queryset(queryset)
+venv/lib/python3.9/site-packages/rest_framework/generics.py:169: in paginate_queryset
+    if self.paginator is None:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;api.views.GroupViewSet object at 0x1101b9280&gt;
+
+    @property
+    def paginator(self):
+        """
+        The paginator instance associated with the view, or `None`.
+        """
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+&gt;               self._paginator = self.pagination_class()
+E               TypeError: 'list' object is not callable
+
+venv/lib/python3.9/site-packages/rest_framework/generics.py:162: TypeError</failure></testcase><testcase classname="tests.test_group.TestGroupAPI" name="test_group_page_not_found" time="0.011" /><testcase classname="tests.test_group.TestGroupAPI" name="test_group_single_not_auth" time="0.010" /><testcase classname="tests.test_group.TestGroupAPI" name="test_group_auth_get" time="0.094"><failure message="TypeError: 'list' object is not callable">self = &lt;tests.test_group.TestGroupAPI object at 0x11020af70&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1101a1580&gt;, group_1 = &lt;Group: Группа 1&gt;
+group_2 = &lt;Group: Группа 2&gt;
+
+    def test_group_auth_get(self, user_client, group_1, group_2):
+&gt;       response = user_client.get(self.group_url)
+
+tests/test_group.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+venv/lib/python3.9/site-packages/rest_framework/test.py:288: in get
+    response = super().get(path, data=data, **extra)
+venv/lib/python3.9/site-packages/rest_framework/test.py:205: in get
+    return self.generic('GET', path, **r)
+venv/lib/python3.9/site-packages/rest_framework/test.py:233: in generic
+    return super().generic(
+venv/lib/python3.9/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.9/site-packages/rest_framework/test.py:285: in request
+    return super().request(**kwargs)
+venv/lib/python3.9/site-packages/rest_framework/test.py:237: in request
+    request = super().request(**kwargs)
+venv/lib/python3.9/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.9/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.9/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.9/site-packages/django/core/handlers/base.py:181: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+venv/lib/python3.9/site-packages/django/views/decorators/csrf.py:54: in wrapped_view
+    return view_func(*args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/viewsets.py:125: in view
+    return self.dispatch(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/views.py:509: in dispatch
+    response = self.handle_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:469: in handle_exception
+    self.raise_uncaught_exception(exc)
+venv/lib/python3.9/site-packages/rest_framework/views.py:480: in raise_uncaught_exception
+    raise exc
+venv/lib/python3.9/site-packages/rest_framework/views.py:506: in dispatch
+    response = handler(request, *args, **kwargs)
+venv/lib/python3.9/site-packages/rest_framework/mixins.py:40: in list
+    page = self.paginate_queryset(queryset)
+venv/lib/python3.9/site-packages/rest_framework/generics.py:169: in paginate_queryset
+    if self.paginator is None:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;api.views.GroupViewSet object at 0x1106249a0&gt;
+
+    @property
+    def paginator(self):
+        """
+        The paginator instance associated with the view, or `None`.
+        """
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+&gt;               self._paginator = self.pagination_class()
+E               TypeError: 'list' object is not callable
+
+venv/lib/python3.9/site-packages/rest_framework/generics.py:162: TypeError</failure></testcase><testcase classname="tests.test_group.TestGroupAPI" name="test_group_create" time="0.092"><failure message="AssertionError: Убедитесь, что группу можно создавать только через админку и что при попытке создать её через POST-запрос к `/api/v1/groups/` возвращается статус 405.&#10;assert 400 == &lt;HTTPStatus.METHOD_NOT_ALLOWED: 405&gt;&#10;  +400&#10;  -&lt;HTTPStatus.METHOD_NOT_ALLOWED: 405&gt;">self = &lt;tests.test_group.TestGroupAPI object at 0x1109f92e0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1109c2460&gt;, group_1 = &lt;Group: Группа 1&gt;
+group_2 = &lt;Group: Группа 2&gt;
+
+    def test_group_create(self, user_client, group_1, group_2):
+        data = {'title': 'Группа  номер 3'}
+        response = user_client.post(self.group_url, data=data)
+&gt;       assert response.status_code == HTTPStatus.METHOD_NOT_ALLOWED, (
+            'Убедитесь, что группу можно создавать только через админку и что '
+            f'при попытке создать её через POST-запрос к `{self.group_url}` '
+            'возвращается статус 405.'
+        )
+E       AssertionError: Убедитесь, что группу можно создавать только через админку и что при попытке создать её через POST-запрос к `/api/v1/groups/` возвращается статус 405.
+E       assert 400 == &lt;HTTPStatus.METHOD_NOT_ALLOWED: 405&gt;
+E         +400
+E         -&lt;HTTPStatus.METHOD_NOT_ALLOWED: 405&gt;
+
+tests/test_group.py:94: AssertionError</failure></testcase><testcase classname="tests.test_group.TestGroupAPI" name="test_group_page_auth_get" time="0.092" /><testcase classname="tests.test_jwt.TestJWT" name="test_jwt_create__invalid_request_data" time="0.257" /><testcase classname="tests.test_jwt.TestJWT" name="test_jwt_create__valid_request_data" time="0.172" /><testcase classname="tests.test_jwt.TestJWT" name="test_jwt_refresh__invalid_request_data" time="0.011" /><testcase classname="tests.test_jwt.TestJWT" name="test_jwt_refresh__valid_request_data" time="0.172" /><testcase classname="tests.test_jwt.TestJWT" name="test_jwt_verify__invalid_request_data" time="0.012" /><testcase classname="tests.test_jwt.TestJWT" name="test_jwt_verify__valid_request_data" time="0.174" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_not_found" time="0.093" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_list_not_auth" time="0.091" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_single_not_auth" time="0.092" /><testcase classname="tests.test_post.TestPostAPI" name="test_posts_auth_get" time="0.171"><failure message="AssertionError: Проверьте, что для авторизованного пользователя ответ на GET-запрос к `/api/v1/posts/` содержит поле `author` с именем автора каждого из постов.&#10;assert 49 == 'TestUser'&#10;  +49&#10;  -'TestUser'">self = &lt;tests.test_post.TestPostAPI object at 0x110a141f0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x11084feb0&gt;, post = &lt;Post: Тестовый пост 1&gt;
+another_post = &lt;Post: Тестовый пост 2&gt;
+
+    def test_posts_auth_get(self, user_client, post, another_post):
+        response = user_client.get(self.post_list_url)
+        assert response.status_code == HTTPStatus.OK, (
+            'Проверьте, что GET-запрос авторизованного пользователя к '
+            f'`{self.post_list_url}` возвращает статус 200.'
+        )
+    
+        test_data = response.json()
+        assert isinstance(test_data, list), (
+            'Проверьте, что GET-запрос авторизованного пользователя к '
+            f'`{self.post_list_url}` возвращает список.'
+        )
+    
+        assert len(test_data) == Post.objects.count(), (
+            'Проверьте, что GET-запрос авторизованного пользователя к '
+            f'`{self.post_list_url}` возвращает список всех постов.'
+        )
+    
+        db_post = Post.objects.first()
+        test_post = test_data[0]
+&gt;       self.check_post_data(
+            test_post,
+            f'GET-запрос к `{self.post_list_url}`',
+            db_post
+        )
+
+tests/test_post.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;tests.test_post.TestPostAPI object at 0x110a141f0&gt;, response_data = {'author': 49, 'group': 31, 'id': 23, 'image': None, ...}
+request_method_and_url = 'GET-запрос к `/api/v1/posts/`', db_post = &lt;Post: Тестовый пост 1&gt;
+
+    def check_post_data(self,
+                        response_data,
+                        request_method_and_url,
+                        db_post=None):
+        expected_fields = ('id', 'text', 'author', 'pub_date')
+        for field in expected_fields:
+            assert field in response_data, (
+                'Проверьте, что для авторизованного пользователя ответ на '
+                f'{request_method_and_url} содержит поле `{field}` постов.'
+            )
+        if db_post:
+&gt;           assert response_data['author'] == db_post.author.username, (
+                'Проверьте, что для авторизованного пользователя ответ на '
+                f'{request_method_and_url} содержит поле `author` с '
+                'именем автора каждого из постов.'
+            )
+E           AssertionError: Проверьте, что для авторизованного пользователя ответ на GET-запрос к `/api/v1/posts/` содержит поле `author` с именем автора каждого из постов.
+E           assert 49 == 'TestUser'
+E             +49
+E             -'TestUser'
+
+tests/test_post.py:27: AssertionError</failure></testcase><testcase classname="tests.test_post.TestPostAPI" name="test_posts_get_paginated" time="0.170"><failure message="AssertionError: Проверьте, что для авторизованного пользователя ответ на GET-запрос к `/api/v1/posts/ с указанием параметров запроса `limit` и `offset`` содержит поле `author` с именем автора каждого из постов.&#10;assert 52 == 'TestUserAnother'&#10;  +52&#10;  -'TestUserAnother'">self = &lt;tests.test_post.TestPostAPI object at 0x11084f5e0&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x110a14640&gt;, post = &lt;Post: Тестовый пост 1&gt;
+post_2 = &lt;Post: Тестовый пост 12342341&gt;, another_post = &lt;Post: Тестовый пост 2&gt;
+
+    def test_posts_get_paginated(self, user_client, post, post_2,
+                                 another_post):
+        limit = 2
+        offset = 2
+        url = f'{self.post_list_url}?limit={limit}&amp;offset={offset}'
+        response = user_client.get(url)
+        assert response.status_code == 200, (
+            'Убедитесь, что GET-запрос с параметрами `limit` и `offset`, '
+            'отправленный авторизованным пользователем к '
+            f'`{self.post_list_url}`, возвращает ответ со статусом 200.'
+        )
+    
+        test_data = response.json()
+    
+        # response with pagination must be a dict type
+        assert type(test_data) == dict, (
+            'Убедитесь, что GET-запрос с параметрами `limit` и `offset`, '
+            'отправленный авторизованным пользователем к '
+            f'`{self.post_list_url}`, возвращает словарь.'
+        )
+        assert "results" in test_data, (
+            'Убедитесь, что GET-запрос с параметрами `limit` и `offset`, '
+            'отправленный авторизованным пользователем к эндпоинту '
+            f'`{self.post_list_url}`, содержит поле `results` с данными '
+            'постов. Проверьте настройку пагинации для этого эндпоинта.'
+        )
+        assert len(test_data['results']) == Post.objects.count() - offset, (
+            'Убедитесь, что GET-запрос с параметрами `limit` и `offset`, '
+            'отправленный авторизованным пользователем к эндпоинту '
+            f'`{self.post_list_url}`, возвращает корректное количество статей.'
+        )
+    
+        db_post = Post.objects.get(text=another_post.text)
+        test_post = test_data.get('results')[0]
+&gt;       self.check_post_data(
+            response_data=test_post,
+            request_method_and_url=(
+                f'GET-запрос к `{self.post_list_url} с указанием параметров '
+                'запроса `limit` и `offset``'
+            ),
+            db_post=db_post
+        )
+
+tests/test_post.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;tests.test_post.TestPostAPI object at 0x11084f5e0&gt;, response_data = {'author': 52, 'group': 34, 'id': 27, 'image': None, ...}
+request_method_and_url = 'GET-запрос к `/api/v1/posts/ с указанием параметров запроса `limit` и `offset``', db_post = &lt;Post: Тестовый пост 2&gt;
+
+    def check_post_data(self,
+                        response_data,
+                        request_method_and_url,
+                        db_post=None):
+        expected_fields = ('id', 'text', 'author', 'pub_date')
+        for field in expected_fields:
+            assert field in response_data, (
+                'Проверьте, что для авторизованного пользователя ответ на '
+                f'{request_method_and_url} содержит поле `{field}` постов.'
+            )
+        if db_post:
+&gt;           assert response_data['author'] == db_post.author.username, (
+                'Проверьте, что для авторизованного пользователя ответ на '
+                f'{request_method_and_url} содержит поле `author` с '
+                'именем автора каждого из постов.'
+            )
+E           AssertionError: Проверьте, что для авторизованного пользователя ответ на GET-запрос к `/api/v1/posts/ с указанием параметров запроса `limit` и `offset`` содержит поле `author` с именем автора каждого из постов.
+E           assert 52 == 'TestUserAnother'
+E             +52
+E             -'TestUserAnother'
+
+tests/test_post.py:27: AssertionError</failure></testcase><testcase classname="tests.test_post.TestPostAPI" name="test_post_create_auth_with_invalid_data" time="0.090" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_create_auth_with_valid_data" time="0.092"><failure message="AssertionError: Проверьте, что для авторизованного пользователя при создании поста через POST-запрос к `/api/v1/posts/` с указанием группы ответ содержит поле `group` с `id` указанной в запросе группы.&#10;assert None == 35&#10;  +None&#10;  -35">self = &lt;tests.test_post.TestPostAPI object at 0x11064a970&gt;, user_client = &lt;rest_framework.test.APIClient object at 0x1101dda60&gt;, user = &lt;User: TestUser&gt;
+group_1 = &lt;Group: Группа 1&gt;
+
+    def test_post_create_auth_with_valid_data(self, user_client, user,
+                                              group_1):
+        post_count = Post.objects.count()
+    
+        assert_msg = (
+            'Проверьте, что для авторизованного пользователя  POST-запрос с '
+            f'корректными данными к `{self.post_list_url}` возвращает ответ '
+            'со статусом 201.'
+        )
+        data = {'text': 'Статья номер 3', 'group': group_1.id}
+        try:
+            response = user_client.post(self.post_list_url, data=data)
+        except IntegrityError as error:
+            raise AssertionError(
+                assert_msg + (
+                    f' В процессе выполнения запроса произошла ошибка: {error}'
+                )
+            )
+        assert response.status_code == HTTPStatus.CREATED, assert_msg
+        post_count += 1
+    
+        test_data = response.json()
+        assert isinstance(test_data, dict), (
+            'Проверьте, что для авторизованного пользователя POST-запрос к '
+            f'`{self.post_list_url}` возвращает ответ, содержащий данные '
+            'нового поста в виде словаря.'
+        )
+        self.check_post_data(
+            test_data, f'POST-запрос к `{self.post_list_url}`'
+        )
+        assert test_data.get('text') == data['text'], (
+            'Проверьте, что для авторизованного пользователя POST-запрос к '
+            f'`{self.post_list_url}` возвращает ответ, содержащий текст '
+            'нового поста в неизменном виде.'
+        )
+        assert test_data.get('author') == user.username, (
+            'Проверьте, что для авторизованного пользователя при создании '
+            f'поста через POST-запрос к `{self.post_list_url}` ответ содержит '
+            'поле `author` с именем пользователя, отправившего запрос.'
+        )
+&gt;       assert test_data.get('group') == group_1.id, (
+            'Проверьте, что для авторизованного пользователя при создании '
+            f'поста через POST-запрос к `{self.post_list_url}` с указанием '
+            'группы ответ содержит поле `group` с `id` указанной в запросе '
+            'группы.'
+        )
+E       AssertionError: Проверьте, что для авторизованного пользователя при создании поста через POST-запрос к `/api/v1/posts/` с указанием группы ответ содержит поле `group` с `id` указанной в запросе группы.
+E       assert None == 35
+E         +None
+E         -35
+
+tests/test_post.py:183: AssertionError</failure></testcase><testcase classname="tests.test_post.TestPostAPI" name="test_post_unauth_create" time="0.166" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_get_current" time="0.092" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_change_auth_with_valid_data[put]" time="0.173" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_change_auth_with_valid_data[patch]" time="0.173" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_change_not_auth_with_valid_data[put]" time="0.090" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_change_not_auth_with_valid_data[patch]" time="0.090" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_change_not_author_with_valid_data[put]" time="0.170" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_change_not_author_with_valid_data[patch]" time="0.172" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_patch_auth_with_invalid_data[put]" time="0.091" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_patch_auth_with_invalid_data[patch]" time="0.090" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_delete_by_author" time="0.091" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_delete_not_author" time="0.170" /><testcase classname="tests.test_post.TestPostAPI" name="test_post_unauth_delete_current" time="0.097" /></testsuite></testsuites>

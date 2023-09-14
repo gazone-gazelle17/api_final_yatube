@@ -38,9 +38,9 @@ class Comment(models.Model):
 class Follow(models.Model):
     '''Модель для существующих подписчиков'''
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='followed')
+        User, on_delete=models.CASCADE, related_name='followed', null=True)
     following = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='followers')
+        User, on_delete=models.CASCADE, related_name='followers', null=True)
 
 
 class Group(models.Model):
