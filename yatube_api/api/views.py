@@ -4,13 +4,13 @@ from rest_framework import mixins
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from posts.models import Comment, Group, Post
 from api.permissions import IsAuthorOrReadOnly
-from api.serializers import (PostSerializer,
-                             GroupSerializer,
+from api.serializers import (CommentSerializer,
                              FollowSerializer,
-                             CommentSerializer
+                             GroupSerializer,
+                             PostSerializer
                              )
+from posts.models import Comment, Group, Post
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -27,11 +27,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     pagination_class = LimitOffsetPagination
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
-
-    def get_group(self):
-        group_id = self.kwargs.get('group_id')
-        return get_object_or_404(Group, pk=group_id)
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class FollowingViewSet(
@@ -56,14 +52,16 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     pagination_class = LimitOffsetPagination
 
-    def get_queryset(self):
+    def get_post(self):
         post_id = self.kwargs.get('post_id')
-        post = get_object_or_404(Post, pk=post_id)
+        return get_object_or_404(Post, pk=post_id)
+
+    def get_queryset(self):
+        post = self.get_post()
         comment_queryset = Comment.objects.select_related(
-            'author').filter(post=post)
+            'author').filter(post=post).all()
         return comment_queryset
 
     def perform_create(self, serializer):
-        post_id = self.kwargs.get('post_id')
-        post = get_object_or_404(Post, pk=post_id)
+        post = self.get_post()
         serializer.save(author=self.request.user, post=post)

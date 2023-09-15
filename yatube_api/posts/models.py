@@ -1,6 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+STR_LIMIT_TITLE = 21
+STR_LIMIT_TEXT = 31
+
 User = get_user_model()
 
 
@@ -12,10 +15,10 @@ class Group(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.title[:21]
+        return self.title[:STR_LIMIT_TITLE]
 
     class Meta:
-        ordering = ['title']
+        ordering = ('title',)
 
 
 class Post(models.Model):
@@ -38,10 +41,10 @@ class Post(models.Model):
     )
 
     def __str__(self):
-        return self.text[:31]
+        return self.text[:STR_LIMIT_TEXT]
 
     class Meta:
-        ordering = ['pub_date']
+        ordering = ('pub_date',)
 
 
 class Comment(models.Model):
@@ -58,8 +61,11 @@ class Comment(models.Model):
         'Дата добавления', auto_now_add=True, db_index=True
     )
 
+    def __str__(self):
+        return self.created
+
     class Meta:
-        ordering = ['created']
+        ordering = ('created',)
 
 
 class Follow(models.Model):
@@ -72,8 +78,11 @@ class Follow(models.Model):
         User, on_delete=models.CASCADE, related_name='followers', null=True
     )
 
+    def __str__(self):
+        return self.user[:STR_LIMIT_TITLE]
+
     class Meta:
-        ordering = ['user']
+        ordering = ('user',)
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'following'],

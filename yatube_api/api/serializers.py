@@ -23,13 +23,13 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = Comment
-        read_only_fields = ['post']
+        read_only_fields = ('post',)
 
 
 class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ['id', 'title', 'slug', 'description']
+        fields = '__all__'
         model = Group
 
 
